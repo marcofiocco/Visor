@@ -10,7 +10,9 @@ COMPILING FROM SCRATCH IN MACOSX
 
 - Run ’brew install freetype’
 
-- Download OpenSceneGraph (tested with 3.4.0): http://www.openscenegraph.org/index.php/download-section/stable-releases
+- Download OpenSceneGraph source and data(tested with 3.4.0)
+	- http://www.openscenegraph.org/index.php/download-section/stable-releases
+	- http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-3.4.0/data/OpenSceneGraph-Data-3.4.0.zip
 
 - Run OSG CMakeFile in CMake and compile with ‘makefile’ target, set
 	- Qt5Widgets_DIR to /Users/marcofiocco/Qt/5.5/clang_64/lib/cmake/Qt5Widgets
@@ -28,6 +30,6 @@ COMPILING FROM SCRATCH IN MACOSX
 - compile with ‘make -j4’ in the build dir of Visor
 
 - Run:
-export OSG_FILE_PATH=/Users/marcofiocco/Documents/Code/Spacesuit/OpenSceneGraph-Data-3.4.0 
+‘export OSG_FILE_PATH=/Users/marcofiocco/Documents/Code/Spacesuit/OpenSceneGraph-Data-3.4.0’
 
 - Run ‘./Visor’
