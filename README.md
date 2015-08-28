@@ -1,4 +1,5 @@
 COMPILING FROM SCRATCH IN MACOSX
+
 - Install CMake (tested with 3.3.1): http://www.cmake.org/download/
 
 - Install Qt (tested with Qt 5.5): http://www.qt.io/qt5-5/
