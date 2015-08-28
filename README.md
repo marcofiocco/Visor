@@ -14,14 +14,14 @@ COMPILING FROM SCRATCH IN MACOSX
 	- http://www.openscenegraph.org/index.php/download-section/stable-releases
 	- http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-3.4.0/data/OpenSceneGraph-Data-3.4.0.zip
 
-- Run OSG CMakeFile in CMake and compile with ‘makefile’ target, set
+- Run OSG CMakeFile.txt in CMake and compile with ‘makefile’ target, set
 	- Qt5Widgets_DIR to /Users/marcofiocco/Qt/5.5/clang_64/lib/cmake/Qt5Widgets
 
 - Run ‘make -j4’ in the build dir of OSG
 
 - Run ‘sudo make install’
 
-- Run Visor CMakeFile in CMake and compile with ‘makefile’ target, set
+- Run Visor CMakeFile.txt in CMake and compile with ‘makefile’ target, set
 	- Qt5Widgets_DIR to /Users/marcofiocco/Qt/5.5/clang_64/lib/cmake/Qt5Widgets
 	- OSG_ROOT_DIR = /usr/local
 	- OSG_PLUGINS_DIR = /usr/local/lib/osgPlugins-3.4.0
@@ -33,3 +33,5 @@ COMPILING FROM SCRATCH IN MACOSX
 ‘export OSG_FILE_PATH=/Users/marcofiocco/Documents/Code/Spacesuit/OpenSceneGraph-Data-3.4.0’
 
 - Run ‘./Visor’
+
+- You can also write and debug code in QtCreator, just open the project by loading the CMakeFile.txt of Visor and then go into Projects, select the Run tab and add the Run Environment variable OSG_FILE_PATH to the value /Users/marcofiocco/Documents/Code/Spacesuit/OpenSceneGraph-Data-3.4.0
