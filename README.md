@@ -35,3 +35,5 @@ COMPILING FROM SCRATCH IN MACOSX
 - Run ‘./Visor’
 
 - You can also write and debug code in QtCreator, just open the project by loading the CMakeFile.txt of Visor and then go into Projects, select the Run tab and add the Run Environment variable OSG_FILE_PATH to the value /Users/marcofiocco/Documents/Code/Spacesuit/OpenSceneGraph-Data-3.4.0
+
+- Confirm that this works.
