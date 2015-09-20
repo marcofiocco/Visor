@@ -1,6 +1,8 @@
 #include <QString>
 #include <QtTest>
 
+#include <Core/GeometryImporter.h>
+
 class BasicTest : public QObject
 {
     Q_OBJECT
@@ -18,7 +20,8 @@ BasicTest::BasicTest()
 
 void BasicTest::testCase1()
 {
-    QVERIFY2(true, "Failure");
+    GeometryImporter g;
+    QCOMPARE(g.process(), true);
 }
 
 QTEST_APPLESS_MAIN(BasicTest)
