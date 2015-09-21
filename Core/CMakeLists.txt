@@ -5,12 +5,12 @@ FIND_PACKAGE(Qt5Widgets REQUIRED)
 
 SET(TARGET_H
     Core_global.h
-    GeometryImporter.h
+    FindGeometryVisitor.h
     ViewerWidget.h
 )
 
 SET(TARGET_SRC
-    GeometryImporter.cpp
+    FindGeometryVisitor.cpp
     ViewerWidget.cpp
 )
 
