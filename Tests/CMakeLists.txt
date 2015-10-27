@@ -6,6 +6,13 @@ ENABLE_TESTING()
 
 FIND_PACKAGE(Qt5Test REQUIRED)
 
+FIND_PACKAGE(CGAL COMPONENTS Core)
+IF (CGAL_FOUND)
+  INCLUDE(${CGAL_USE_FILE})
+ELSE()
+  MESSAGE(STATUS "This test requires the CGAL library, and will not be compiled.")
+ENDIF()
+
 MACRO (addTest testname testsrc)
   SET (test_${testname}_SRCS ${testsrc})
   ADD_EXECUTABLE(test_${testname} ${test_${testname}_SRCS})
@@ -14,3 +21,4 @@ MACRO (addTest testname testsrc)
 ENDMACRO (addTest)
 
 addTest(BasicTest tst_basictest.cpp)
+addTest(CGALTest tst_test_cgal.cpp)

@@ -21,17 +21,33 @@ BasicTest::BasicTest()
 
 void BasicTest::testCase1()
 {
-    osg::Node* model = osgDB::readNodeFile("glider.osg");
+    osg::Node* model = osgDB::readNodeFile("cow.osg");
 
     QVERIFY(model);
 
     if (model)
     {
-        FindGeometryVisitor fgv;
+        Visor::FindGeometryVisitor fgv;
         model->accept(fgv);
 
-        std::cout << "Model size: " << fgv.vertexArrays().size() << std::endl;
-        QVERIFY(fgv.vertexArrays().size() == 6);
+        std::cout << "Model geometry blocks: " << fgv.geometryArray().size() << std::endl;
+        QVERIFY(fgv.geometryArray().size() == 1);
+        for (int g = 0; g < fgv.geometryArray().size(); ++g)
+        {
+            const Visor::Geometry& geometry = fgv.geometryArray()[g];
+
+            std::cout << "   Geometry vertex array size: " << geometry.vertexArray().size() << std::endl;
+            QVERIFY(geometry.vertexArray().size() == 7772);
+
+            std::cout << "   Geometry primitive arrays: " << geometry.primitiveArray().size() << std::endl;
+            QVERIFY(geometry.primitiveArray().size() == 1);
+            for (int p = 0; p < geometry.primitiveArray().size(); ++p)
+            {
+                const Visor::Primitive& primitive = geometry.primitiveArray()[p];
+                std::cout << "       Primitive (type " << primitive.getType() << ") size: " << primitive.getIndices().size() << std::endl;
+                QVERIFY(primitive.getIndices().size() == 7772);
+            }
+        }
     }
 }
 

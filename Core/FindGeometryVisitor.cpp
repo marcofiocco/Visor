@@ -6,6 +6,8 @@
 #include <osg/io_utils>
 #include <iostream>
 
+using namespace Visor;
+
 class AttributePrinter : public osg::Drawable::AttributeFunctor
 {
 public:
@@ -56,7 +58,6 @@ struct TrianglePrinter
 
 FindGeometryVisitor::FindGeometryVisitor() : osg::NodeVisitor(TRAVERSE_ALL_CHILDREN)
 {
-    _vertexArrays.clear();
 }
 
 void FindGeometryVisitor::apply(osg::Node& node)
@@ -72,35 +73,11 @@ void FindGeometryVisitor::apply(osg::Geode& node)
         if (!drawable) continue;
         std::cout << "[" << drawable->libraryName() << "::" << drawable->className() << "]" << std::endl;
 
-        osg::Geometry* geom = dynamic_cast<osg::Geometry*>(drawable);
-        if (geom)
+        osg::Geometry* osg_geom = dynamic_cast<osg::Geometry*>(drawable);
+        if (osg_geom)
         {
-            osg::Geometry::PrimitiveSetList& primitives = geom->getPrimitiveSetList();
-            osg::Geometry::PrimitiveSetList::iterator itr;
-            unsigned int numSurfacePrimitives = 0;
-            for (itr = primitives.begin(); itr != primitives.end(); ++itr)
-            {
-                switch((*itr)->getMode())
-                {
-                    case(osg::PrimitiveSet::TRIANGLES):
-                    case(osg::PrimitiveSet::TRIANGLE_STRIP):
-                    case(osg::PrimitiveSet::TRIANGLE_FAN):
-                    case(osg::PrimitiveSet::QUADS):
-                    case(osg::PrimitiveSet::QUAD_STRIP):
-                    case(osg::PrimitiveSet::POLYGON):
-                        ++numSurfacePrimitives;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (!numSurfacePrimitives) return;
-
-            osg::Vec3Array *coords = dynamic_cast<osg::Vec3Array*>(geom->getVertexArray());
-            _vertexArrays.push_back(coords);
-
-            //osg::Vec3Array *normals = dynamic_cast<osg::Vec3Array*>(geom->getNormalArray());
+            Visor::Geometry geometry(osg_geom);
+            _geometryArray.push_back(geometry);
         }
 
 //        AttributePrinter attrPrinter;
@@ -112,4 +89,67 @@ void FindGeometryVisitor::apply(osg::Geode& node)
 //        std::cout << std::endl;
     }
     traverse(node);
+}
+
+Primitive::Primitive(const osg::PrimitiveSet *primitive)
+{
+    type = (osg::PrimitiveSet::Mode)primitive->getMode();
+    for (int i = 0; i < primitive->getNumIndices(); ++i)
+    {
+        indices.push_back(primitive->index(i));
+    }
+}
+
+osg::PrimitiveSet::Mode Primitive::getType() const
+{
+    return type;
+}
+
+const std::vector<uint>& Primitive::getIndices() const
+{
+    return indices;
+}
+
+Geometry::Geometry(const osg::Geometry *osg_geometry)
+{
+    const osg::Geometry::PrimitiveSetList& osg_primitives = osg_geometry->getPrimitiveSetList();
+    for (int p = 0; p < osg_primitives.size(); ++p)
+    {
+        osg::PrimitiveSet* osg_primitive = osg_primitives[p];
+        switch(osg_primitive->getMode())
+        {
+            case(osg::PrimitiveSet::TRIANGLES):
+            case(osg::PrimitiveSet::TRIANGLE_STRIP):
+            case(osg::PrimitiveSet::TRIANGLE_FAN):
+            case(osg::PrimitiveSet::QUADS):
+            case(osg::PrimitiveSet::QUAD_STRIP):
+            case(osg::PrimitiveSet::POLYGON):
+                {
+                    Visor::Primitive visor_primitive(osg_primitive);
+                    _primitiveArray.push_back(visor_primitive);
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (_primitiveArray.size() == 0)
+        return;
+
+    const osg::Vec3Array *coords = dynamic_cast<const osg::Vec3Array*>(osg_geometry->getVertexArray());
+    for (int v = 0; v < coords->size(); ++v)
+    {
+        _vertexArray.push_back(Visor::Vertex(coords->at(v)));
+    }
+
+    //osg::Vec3Array *normals = dynamic_cast<osg::Vec3Array*>(osg_geometry->getNormalArray());
+}
+
+Vertex::Vertex(const osg::Vec3 &v)
+{
+    _v[0] = v.x();
+    _v[1] = v.y();
+    _v[2] = v.z();
 }
