@@ -13,12 +13,18 @@ ELSE()
   MESSAGE(STATUS "This test requires the CGAL library, and will not be compiled.")
 ENDIF()
 
+FIND_PACKAGE(OpenVDB)
+INCLUDE_DIRECTORIES (${OPENVDB_INCLUDE_DIR})
+
 MACRO (addTest testname testsrc)
   SET (test_${testname}_SRCS ${testsrc})
   ADD_EXECUTABLE(test_${testname} ${test_${testname}_SRCS})
-  TARGET_LINK_LIBRARIES(test_${testname} Qt5::Test Core)
+  TARGET_LINK_LIBRARIES(test_${testname} Qt5::Test Core ${OPENVDB_LIBRARY})
   ADD_TEST(test_${testname} test_${testname})
 ENDMACRO (addTest)
 
 addTest(BasicTest tst_basictest.cpp)
 addTest(CGALTest tst_test_cgal.cpp)
+
+# OpenVDB on MacOSX (downloaded with 'brew') says symbol(s) not found for architecture x86_64, when linking here. Must recompile OpenVDB from scratch?
+#addTest(OpenVDBTest tst_test_openvdb.cpp)
